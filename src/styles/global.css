@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  line-height: 1.5;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+p {
+  color: #666;
+}
+
+/* Campo del Buscador */
+.search-box {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.search-box label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.search-box input {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #0066cc;
+}
+
+/* CSS Grid responsivo según pauta */
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Regla indispensable para ocultar productos no coincidentes */
+.producto[hidden] {
+  display: none !important;
+}
+
+.alert {
+  padding: 1rem;
+  background-color: #ffe6e6;
+  color: #d93838;
+  border: 1px solid #f5c2c2;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.empty-msg {
+  padding: 2rem 0;
+  text-align: center;
+  color: #777;
+}

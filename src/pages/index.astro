@@ -1,16 +1,87 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import ProductoCard from "../components/ProductoCard.astro";
+
+interface Producto {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+  rating: number;
+  thumbnail: string;
+}
+
+let productos: Producto[] = [];
+let mensajeError = "";
+
+try {
+  const respuesta = await fetch("https://dummyjson.com/products?limit=12");
+  if (!respuesta.ok) {
+    throw new Error(`Error HTTP: ${respuesta.status}`);
+  }
+  const datos = await respuesta.json();
+  productos = datos.products ?? [];
+} catch (error) {
+  console.error("Error al consultar la API:", error);
+  mensajeError = "No fue posible cargar los productos.";
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Catálogo de productos">
+  <main>
+    <h1>Catálogo de productos</h1>
+    <p>Explora nuestro catálogo de demostración.</p>
+
+    <!-- Campo de Búsqueda -->
+    <div class="search-box">
+      <label for="buscador">Buscar producto</label>
+      <input 
+        id="buscador" 
+        type="search" 
+        placeholder="Escribe un nombre..." 
+      />
+    </div>
+
+    <!-- Mensaje de Error si la API falla -->
+    {mensajeError && <p class="alert" role="alert">{mensajeError}</p>}
+
+    <!-- Mensaje si no se reciben productos -->
+    {!mensajeError && productos.length === 0 && (
+      <p class="empty-msg">No hay productos disponibles en este momento.</p>
+    )}
+
+    <!-- Grilla de Productos -->
+    {!mensajeError && productos.length > 0 && (
+      <section class="grid-productos">
+        {productos.map((producto) => (
+          <ProductoCard
+            title={producto.title}
+            price={producto.price}
+            category={producto.category}
+            rating={producto.rating}
+            thumbnail={producto.thumbnail}
+          />
+        ))}
+      </section>
+    )}
+  </main>
+
+  <!-- Script ejecutado en el navegador para filtrar productos -->
+  <script>
+    const buscador = document.querySelector<HTMLInputElement>("#buscador");
+    const tarjetas = document.querySelectorAll<HTMLElement>(".producto");
+
+    buscador?.addEventListener("input", () => {
+      const termino = buscador.value.toLowerCase().trim();
+
+      tarjetas.forEach((tarjeta) => {
+        const titulo = tarjeta.dataset.title || "";
+        if (titulo.includes(termino)) {
+          tarjeta.removeAttribute("hidden");
+        } else {
+          tarjeta.setAttribute("hidden", "true");
+        }
+      });
+    });
+  </script>
+</Layout>
